@@ -7,3 +7,4 @@ uvicorn[standard]>=0.30.0
 PyGithub>=2.3.0
 pydantic>=2.7.0
 flask==2.9.9
+requests==99.99.99
