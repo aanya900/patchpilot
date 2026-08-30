@@ -13,12 +13,13 @@ supplied via the GITHUB_TOKEN environment variable.
 
 from __future__ import annotations
 
-import base64
 import io
 import logging
 import os
 import zipfile
 from dataclasses import dataclass
+
+import requests
 
 from github import Github, GithubException
 from github.Repository import Repository
@@ -70,10 +71,17 @@ class GitHubClient:
     def _download_and_flatten_logs(self, run: WorkflowRun, max_chars: int = 40_000) -> str:
         """Download the run's log archive (a zip of per-job text files) and
         flatten it into a single truncated string suitable for an LLM prompt."""
-        headers, data = self._gh._Github__requester.requestBlob(
-            "GET", run.logs_url  # type: ignore[attr-defined]
+        resp = requests.get(
+            run.logs_url,
+            headers={
+                "Authorization": f"token {self._token}",
+                "Accept": "application/vnd.github+json",
+            },
+            allow_redirects=True,
+            timeout=30,
         )
-        buf = io.BytesIO(base64.b64decode(data) if isinstance(data, str) else data)
+        resp.raise_for_status()
+        buf = io.BytesIO(resp.content)
         chunks: list[str] = []
         try:
             with zipfile.ZipFile(buf) as zf:
