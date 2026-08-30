@@ -1,0 +1,9 @@
+google-adk>=2.8.0
+google-genai>=1.0.0
+google-cloud-firestore>=2.16.0
+google-cloud-pubsub>=2.21.0
+fastapi>=0.111.0
+uvicorn[standard]>=0.30.0
+PyGithub>=2.3.0
+pydantic>=2.7.0
+flask==2.9.9
