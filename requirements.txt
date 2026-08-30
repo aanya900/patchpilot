@@ -8,3 +8,4 @@ PyGithub>=2.3.0
 pydantic>=2.7.0
 flask>=3.0.0
 pytest
+pytest-asyncio
