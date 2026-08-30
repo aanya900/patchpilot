@@ -1,0 +1,18 @@
+# Example CI workflow for a repo that wants PatchPilot watching it.
+# PatchPilot itself is triggered by the `workflow_run` webhook event GitHub
+# sends when THIS workflow finishes — no changes needed here beyond having
+# a normal CI job and registering the PatchPilot webhook on the repo.
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - run: pytest -q
